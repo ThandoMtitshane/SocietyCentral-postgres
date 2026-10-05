@@ -1,0 +1,38 @@
+spring.application.name=SocietyCentral
+
+spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=SocietyCentral;encrypt=true;trustServerCertificate=true;sendTimeAsDatetime=false
+spring.datasource.username={REPLACE WITH YOUR USERNAME}
+spring.datasource.password={REPLACE WITH YOUR PASSWORD}
+spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.show-sql=true
+spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.SQLServerDialect
+
+# JWT Configuration
+
+jwt.secret={Replace with the string I gave on the whatsapp Group}
+jwt.expiration-ms=86400000
+
+# Resend email configuration. Leave RESEND_API_KEY unset to disable email locally.
+resend.api.key=${RESEND_API_KEY:}
+resend.from.address=${RESEND_FROM_ADDRESS:onboarding@resend.dev}
+resend.from.name=${RESEND_FROM_NAME:SocietyCentral}
+
+
+app.base-url=http://localhost:5173
+
+# Event media upload and local-development storage
+spring.servlet.multipart.max-file-size=5MB
+spring.servlet.multipart.max-request-size=12MB
+societycentral.upload-dir=${SOCIETYCENTRAL_UPLOAD_DIR:uploads/events}
+societycentral.media-base-url=${SOCIETYCENTRAL_MEDIA_BASE_URL:http://localhost:8080}
+
+// Remove everything after this line when you copy...
+// 1. on the same directory with this file create a file
+// 2. name the file application.properties
+// 3. copy everything above into that file.
+// 4. replace everything in brackets with real values (Username and password are the username and password...
+// created when making a new login into SSMS.
+// after you have created this file and the database is also ready, run the application (you should be able to run the application successfully.)

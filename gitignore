@@ -1,0 +1,21 @@
+# ============================================================
+# SocietyCentral .gitignore
+# ============================================================
+
+# Personal local config - NEVER commit this (contains DB credentials)
+src/main/resources/application.properties
+
+# Maven build output
+target/
+
+# IntelliJ project files
+.idea/
+*.iml
+*.iws
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

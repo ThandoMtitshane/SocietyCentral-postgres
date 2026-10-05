@@ -1,0 +1,22 @@
+package com.societycentral.model;
+
+/**
+ * Supported categories for SocietyCentral in-app notifications.
+ */
+public enum NotificationType {
+    TASK_REMINDER,
+    EVENT_UPDATE,
+    ANNOUNCEMENT,
+    MEMBERSHIP_APPLICATION_SUBMITTED,
+    MEMBERSHIP_APPROVED,
+    MEMBERSHIP_REJECTED,
+    TASK_ASSIGNED,
+    MESSAGE_RECEIVED,
+    MESSAGE_MENTION,
+    CONVERSATION_REQUEST,
+    EVENT_PROPOSAL_SUBMITTED,
+    EVENT_PROPOSAL_APPROVED,
+    EVENT_PROPOSAL_REJECTED,
+    EVENT_CANCELLED,
+    EVENT_POSTPONED
+}

@@ -1,0 +1,41 @@
+# ============================================================
+# SocietyCentral .gitignore
+# ============================================================
+
+# NOTE: application.properties is committed in this deployment copy because all
+# secrets are externalized to environment variables (set them in Render).
+
+HELP.md
+target/
+/uploads/events/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
