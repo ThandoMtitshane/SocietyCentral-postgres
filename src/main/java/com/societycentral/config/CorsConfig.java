@@ -11,33 +11,44 @@ import java.util.List;
 
 /**
  * CORS configuration allowing the React frontend (running on a different
- * port locally) to call this Spring Boot API.
+ * origin) to call this Spring Boot API.
  * <p>
  * Local dev origins covered:
  * - http://localhost:3000  (Create React App default)
  * - http://localhost:5173  (Vite default - common with React+Vite setups)
  * - http://localhost:5174  (Vite secondary port if 5173 is taken)
  * <p>
+ * Production origins covered:
+ * - https://societycentral.uk      (primary domain)
+ * - https://www.societycentral.uk  (www is a distinct browser origin)
+ * - https://societycentral-nmu.netlify.app (Netlify deployment)
  */
 @Configuration
 public class CorsConfig {
 
-    @Bean
-    public CorsFilter corsFilter() {
+    /**
+     * Single source of truth for allowed browser origins, shared by both beans
+     * below so the two lists can never drift apart.
+     */
+    public static final List<String> ALLOWED_ORIGINS = List.of(
+            "http://localhost:3000",
+            "http://localhost:5173",
+            "http://localhost:5174",
+            "https://societycentral.uk",
+            "https://www.societycentral.uk",
+            "https://societycentral-nmu.netlify.app"
+    );
+
+    private static final List<String> ALLOWED_METHODS = List.of(
+            "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"
+    );
+
+    /** Builds the shared CORS policy applied to every endpoint. */
+    private static CorsConfiguration buildConfig() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // Allowed origins - local dev React ports
-        config.setAllowedOrigins(List.of(
-                "http://localhost:3000",
-                "http://localhost:5173",
-                "http://localhost:5174",
-                "https://societycentral-nmu.netlify.app"
-        ));
-
-        // Allow standard HTTP methods
-        config.setAllowedMethods(List.of(
-                "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"
-        ));
+        config.setAllowedOrigins(ALLOWED_ORIGINS);
+        config.setAllowedMethods(ALLOWED_METHODS);
 
         // Allow all headers including Authorization (needed for JWT Bearer token)
         config.setAllowedHeaders(List.of("*"));
@@ -51,35 +62,22 @@ public class CorsConfig {
         // Cache preflight response for 1 hour (reduces OPTIONS requests)
         config.setMaxAge(3600L);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
+        return config;
+    }
 
-        return new CorsFilter(source);
+    private static UrlBasedCorsConfigurationSource buildSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", buildConfig());
+        return source;
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        return new CorsFilter(buildSource());
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-
-        config.setAllowedOrigins(List.of(
-                "http://localhost:3000",
-                "http://localhost:5173",
-                "http://localhost:5174",
-                "https://societycentral-nmu.netlify.app"
-        ));
-
-        config.setAllowedMethods(List.of(
-                "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"
-        ));
-
-        config.setAllowedHeaders(List.of("*"));
-        config.setExposedHeaders(List.of("Authorization"));
-        config.setAllowCredentials(true);
-        config.setMaxAge(3600L);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-
-        return source;
+        return buildSource();
     }
 }

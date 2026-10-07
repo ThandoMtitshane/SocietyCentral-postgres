@@ -41,12 +41,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        // Reuses the same allow-list as the REST CORS policy so the websocket
+        // handshake can never fall out of sync with the HTTP origins.
         registry.addEndpoint("/ws")
                 .setAllowedOriginPatterns(
-                        "http://localhost:3000",
-                        "http://localhost:5173",
-                        "http://localhost:5174",
-                        "https://societycentral-nmu.netlify.app")
+                        CorsConfig.ALLOWED_ORIGINS.toArray(new String[0]))
                 .withSockJS();
     }
 
